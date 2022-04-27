@@ -5,10 +5,10 @@ root = Tk()
 root.title("Character Creator")
 
 # adding favicon
-root.iconbitmap('favicon.ico')
+root.iconbitmap('images/favicon.ico')
 
 # add image
-my_img = ImageTk.PhotoImage(Image.open('BitD_banner.png'))
+my_img = ImageTk.PhotoImage(Image.open('images/BitD_banner.png'))
 my_label = Label(image=my_img)
 my_label.grid(column=0, row=0, columnspan=14)
 
