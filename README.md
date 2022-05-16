@@ -29,38 +29,38 @@ The Navbars in the program may consist of the following buttons:
 ### Create Character Window
 This window allows the user to create a character using the rules of the ***Blades in the Dark Game***. To reference game rules on how to create characters go [here](https://bladesinthedark.com/character-creation)
 
-#### **Name**
-> Enter your characters name
+#### Name
+> Enter your characters name in the entry box.
 
 #### Alias
-Enter your characters alias
+> Enter your characters alias in the entry box
 
 #### Describe Your Look
-Enter how your character appears/dresses.
+> Enter how your character appears/dresses.
 
 #### Heiritage
-Enter your characters Heiritage
+> Enter your characters Heiritage in the box.
 
 #### Background
-Enter your characters Background and any details about it.
+> Enter your characters Background and any details about it.
 
 #### Vice
-Choose a single vice, then enter any detail and the purveyor of the vice.
+> Using the buttons, choose a single vice, then enter any detail and the purveyor of the vice.
 
 #### Playbook
-Choose a single playbook. This will change which **Special Abilities** and **Friends/Rivals** you can select. It will also auto populate the starting actions for the playbook.
+> Choose a single playbook. This will change which **Special Abilities** and **Friends/Rivals** you can select. It will also auto-populate the starting actions for the playbook.
 
 #### Special Ability
-Pick one **Special Ability**.
+> Pick one **Special Ability** with the buttons.
 
 #### Friend/Rival
-Pick one **Friend** using the buttons on the left and one **Rival** using the buttons on the right.
+> Pick one **Friend** using the buttons on the left and one **Rival** using the buttons on the right.
 
 #### Action Ranks
-Assign 4 **Action Ranks**. You may not select a rank higher than two at character creation.
+> Assign 4 **Action Ranks**. You may not select a rank higher than two at character creation. When you select an Action at rank one the next rank will open automatically.
 
 #### Save Character
-This will save the data from the form to a csv file to load later in the **Load Window**.
+> This will save the data from the form to a csv file to load later in the **Load Window**.
 
 ### Load Character Window
 ***This section is under construction currently. Please check in later.*** 
