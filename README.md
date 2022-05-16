@@ -7,7 +7,7 @@ How to Use This Program
 -----------------------
 ### Requirements
 This program is written with Python 3. If you don't have **Python 3** you can download it at [here](https://www.python.org/downloads/)
-This program also has the following imports
+This program also has the following imports:
 - tkinter as tk
 - csv
 - ImageTk, Image from PIL
@@ -29,8 +29,8 @@ The Navbars in the program may consist of the following buttons:
 ### Create Character Window
 This window allows the user to create a character using the rules of the ***Blades in the Dark Game***. To reference game rules on how to create characters go [here](https://bladesinthedark.com/character-creation)
 
-#### Name
-Enter your characters name
+#### **Name**
+> Enter your characters name
 
 #### Alias
 Enter your characters alias
