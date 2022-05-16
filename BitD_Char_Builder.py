@@ -2,7 +2,7 @@ import tkinter as tk
 import csv
 from PIL import ImageTk, Image
 from tkinter import filedialog
-from tkinter import font as tkfont
+
 
 
 root = tk.Tk()
@@ -23,15 +23,24 @@ bg = tk.Label(startfrm, image=bitdbanner, bg='#0d0d0d')
 bg.grid(row=0, column=0, columnspan=14)
 
 def openload():
-
+    """
+    Opens the Load Toplevel Window
+    """
     ldwindow = tk.Toplevel(root)
     ldwindow["bg"] = "#0d0d0d"
     ldwindow.geometry("1200x650")
     ldwindow.resizable(False, False)
     ldwindow.title("BitD Character Creator-Load")
     ldwindow.iconbitmap('images/favicon.ico')
-#     global file_image
-#     filename = filedialog.askopenfilename(initialdir="", title="Select A File", filetypes=[("CSV files", "*.csv")])
+
+    # Creates main frame; sets BG Image
+    infofrm = tk.Frame(ldwindow, height=559, width=1200, bg="#F25C05")
+    infofrm.grid(row=0, column=0, columnspan=14)
+    global bitddrk
+    bitddrk = ImageTk.PhotoImage(Image.open('images/BitD_const.png'))
+    global bgload
+    bgload = tk.Label(infofrm, image=bitddrk, bg='#0d0d0d', borderwidth=0, highlightthickness=0)
+    bgload.grid(column=0, row=0)
 
 
     def openmain():
@@ -40,15 +49,7 @@ def openload():
         finally:
             root.deiconify()
 
-    infofrm = tk.Frame(ldwindow, height=559, width=1200, bg="#F25C05")
-    infofrm.grid(row=0, column=0, columnspan=14)
 
-    global bitddrk
-    bitddrk = ImageTk.PhotoImage(Image.open('images/BitD_dark.png'))
-
-    global bgload
-    bgload = tk.Label(infofrm, image=bitddrk, bg='#0d0d0d', borderwidth=0, highlightthickness=0)
-    bgload.grid(column=0, row=0)
 
     navfrm = tk.Frame(ldwindow, width=1200, height=85, bg="#0d0d0d", borderwidth=0, highlightthickness=0)
     navfrm.grid(row=1, column=0, columnspan=14)
@@ -74,7 +75,10 @@ def openload():
 
 
 def opencreate():
-    root.withdraw()
+    """
+    Opens Create Character Toplevel Window
+    Creates all widgets and functions for Window
+    """
 
     crwindow = tk.Toplevel(root)
     crwindow["bg"] = "#0d0d0d"
@@ -83,31 +87,18 @@ def opencreate():
     crwindow.title("BitD Character Creator")
     crwindow.iconbitmap('images/favicon.ico')
 
-
-    # def on_closing():
-    #     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-    #         root.destroy()
-    #
-    # root.protocol("WM_DELETE_WINDOW", on_closing)
-
-    def openmain():
-        try:
-            crwindow.withdraw()
-        finally:
-            root.deiconify()
-
-
+    # Creates main frame; sets BG Image
     infofrm = tk.Frame(crwindow, height=559, width=1200, bg="#F25C05")
     infofrm.grid(row=0, column=0, columnspan=7)
-
     global bitddrk
     bitddrk = ImageTk.PhotoImage(Image.open('images/BitD_dark.png'))
     global bgcreate
     bgcreate = tk.Label(infofrm, image=bitddrk, bg='#0d0d0d', borderwidth=0, highlightthickness=0)
     bgcreate.grid(column=0, row=0, sticky="e")
 
+    # >>>>>>>>>>>>>>>>>>>>>>>>> General Traits Section<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    # name section
+    # Creates name section; Frame, Label and Entrybox
     nameframe = tk.Frame(bgcreate, width=235, height=50)
     nameframe.place(x=75, y=25)
     nameframe.pack_propagate(False)
@@ -116,7 +107,7 @@ def opencreate():
     nameentry = tk.Entry(nameframe, font=("Helvetica 14"))
     nameentry.pack(fill=tk.X)
 
-    # Alias Section
+    # Creates Alias Section: Frame, Label and Entrybox
     aliasframe = tk.Frame(bgcreate, width=235, height=50)
     aliasframe.place(x=325, y=25)
     aliasframe.pack_propagate(False)
@@ -125,7 +116,7 @@ def opencreate():
     aliasentry = tk.Entry(aliasframe, font=("Helvetica 14"))
     aliasentry.pack(fill=tk.X)
 
-    # Look Section
+    # Creates Look Section: Frame, Label and Sentrybox
     lookframe = tk.Frame(bgcreate, width=485, height=50)
     lookframe.place(x=75, y=100)
     lookframe.pack_propagate(False)
@@ -135,23 +126,21 @@ def opencreate():
     lookentry = tk.Entry(lookframe, font=("Helvetica 14"))
     lookentry.pack(fill=tk.X)
 
-    # Heiritage secion
+    # Creates Heritage section: Frame, Label, and Entrybox
     heirframe = tk.Frame(bgcreate, width=235, height=50)
     heirframe.place(x=75, y=175)
     heirframe.pack_propagate(False)
     heirlabel = tk.Label(heirframe, text="Heiritage", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
     heirlabel.pack(fill=tk.X)
-    # !!!!!!!! MAKE DROPDOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     heirentry = tk.Entry(heirframe, font=("Helvetica 14"))
     heirentry.pack(fill=tk.X)
 
-    # Background Section
+    # Creates Background Section: : Frame, Label, and Entrybox
     backframe = tk.Frame(bgcreate, width=235, height=50)
     backframe.place(x=325, y=175)
     backframe.pack_propagate(False)
     backlabel = tk.Label(backframe, text="Background", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
     backlabel.pack(fill=tk.X)
-    # !!!!!!MAKE DROPDOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     backentry = tk.Entry(backframe, font=("Helvetica 14"))
     backentry.pack(fill=tk.X)
 
@@ -201,6 +190,32 @@ def opencreate():
         playbooknames[i] = playbooknames[i].capitalize()
 
     # Select button functions
+    def read_cell(x, play):
+        """function takes in a value for the csv column and the archetype
+        to return a value from a specific cell in the reference csv"""
+
+        y = playdict[play]
+
+        with open('.dat/BitDClasses.csv', 'r') as f:
+            reader = csv.reader(f)
+            y_count = 0
+
+            for n in reader:
+                if y_count == y:
+                    cell = n[x]
+                    return cell
+                y_count += 1
+
+    def specability(play):
+        """Propagates a list of a playbook's special abilities for reference by the program. play is passed
+        through to read_cell and values returned appended to the list"""
+
+        abilitylist = []
+        for i in range(1, 9):
+            abilitylist.append(read_cell(i, play))
+            abilities = tuple(abilitylist)
+        return abilities
+
     def playclick(value):
         """Function takes in value from radio button and configures
         radio buttons of abilities and ally sections"""
@@ -208,7 +223,12 @@ def opencreate():
         updatefriend(value)
         updateactions(value)
 
+
     def updateability(value):
+        """
+        takes in value and calls specability() to creat ability list
+        this list is then configured for user choice in the special ability radio buttons
+        """
         global playbook
         if value == 1:
             playbook = "cutter"
@@ -236,7 +256,21 @@ def opencreate():
         s7.config(text=f"{(specabilities[6])}")
         s8.config(text=f"{(specabilities[7])}")
 
+    def friendfoe(play):
+        """Propagates a list of a playbooks friends and rivals for reference by program. play is passed
+        through to read_cell and values returned appended to the list"""
+
+        friendlist = []
+        for i in range(17, 22):
+            friendlist.append(read_cell(i, play))
+            friends = tuple(friendlist)
+        return friends
+
     def updatefriend(value):
+        """
+         Takes in value and calls friendfoe() to create list of friends/foes
+         List is then configured to friend/foe radio buttons
+        """
         if value == 1:
             playbook = "cutter"
         elif value == 2:
@@ -261,6 +295,10 @@ def opencreate():
         fr5.config(text=f"   {(friends[4])}")
 
     def updateactions(value):
+        """
+        Trys deselecting actions checkboxes to reset
+        Then selects starting actions checkboxes based on playbook selection statements
+        """
         try:
             for i in actionckbxlist:
                 i.deselect()
@@ -319,476 +357,15 @@ def opencreate():
                 studybox1.select()
                 studybox1.config(state="disabled")
 
-    # Create Playbook Selection Frame
-    archselframe = tk.Frame(bgcreate, width=485, height=125, bg="#25262b")
-    archselframe.place(x=75, y=400)
-
-    # Create Label
-    archsellabel = tk.Label(archselframe, padx=160, pady=4, text="Select A Playbook", fg="#f25c05", bg="#25262b",
-                            font=("Helvetica 14 bold"))
-    archsellabel.grid(column=0, row=0, columnspan=4)
-
-    # sets variable type for playbook selection radio buttons
-    p1 = tk.IntVar()
-    p1.set(1)
-
-    # first row radiobuttons
-    for i in range(1, 5):
-        tk.Radiobutton(archselframe, text=f"{(playbooknames[i - 1])}", padx=17, variable=p1, value=i,
-                       selectcolor="#0d0d0d", fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"),
-                       command=lambda: playclick(p1.get())).grid(row=1, column=i - 1)
-
-    # second row radiobuttons
-    for i in range(5, 8):
-        tk.Radiobutton(archselframe, text=f"{(playbooknames[i - 1])}", padx=17, variable=p1, value=i,
-                       selectcolor="#0d0d0d", fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"),
-                       command=lambda: playclick(p1.get())).grid(row=2, column=i - 5, columnspan=2)
-
-    # ----SPECIAL ABILITY SECTION----
-
-    def read_cell(x, play):
-        """function takes in a value for the csv column and the archetype
-        to return a value from a specific cell in the reference csv"""
-
-        y = playdict[play]
-
-        with open('.dat/BitDClasses.csv', 'r') as f:
-            reader = csv.reader(f)
-            y_count = 0
-
-            for n in reader:
-                if y_count == y:
-                    cell = n[x]
-                    return cell
-                y_count += 1
-
-    def specability(play):
-        """Propagates a list of a playbook's special abilities for reference by the program. play is passed
-        through to read_cell and values returned appended to the list"""
-
-        abilitylist = []
-        for i in range(1, 9):
-            abilitylist.append(read_cell(i, play))
-            abilities = tuple(abilitylist)
-        return abilities
-
-    def friendfoe(play):
-        """Propagates a list of a playbooks friends and rivals for reference by program. play is passed
-        through to read_cell and values returned appended to the list"""
-
-        friendlist = []
-        for i in range(17, 22):
-            friendlist.append(read_cell(i, play))
-            friends = tuple(friendlist)
-        return friends
-
-    # create list from selected playbook
-    specabilities = specability("cutter")
-
-    # Create Special Ability Frame
-    specfrm = tk.Frame(bgcreate, width=317, height=275, bg="#25262b")
-    specfrm.place(x=598, y=25)
-    specfrm.pack_propagate(False)
-
-    # sets variable type for ability selection radio buttons
-    s = tk.IntVar()
-    s.set(1)
-
-    # Creates label and radiobuttons
-    # label
-    speclabel = tk.Label(specfrm, text="Pick A Special Ability", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
-    speclabel.pack()
-
-    # radiobuttons
-    s1 = tk.Radiobutton(specfrm, text=f"{(specabilities[0])}", padx=17, variable=s, value=1, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s2 = tk.Radiobutton(specfrm, text=f"{(specabilities[1])}", padx=17, variable=s, value=2, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s3 = tk.Radiobutton(specfrm, text=f"{(specabilities[2])}", padx=17, variable=s, value=3, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s4 = tk.Radiobutton(specfrm, text=f"{(specabilities[3])}", padx=17, variable=s, value=4, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s5 = tk.Radiobutton(specfrm, text=f"{(specabilities[4])}", padx=17, variable=s, value=5, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s6 = tk.Radiobutton(specfrm, text=f"{(specabilities[5])}", padx=17, variable=s, value=6, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s7 = tk.Radiobutton(specfrm, text=f"{(specabilities[6])}", padx=17, variable=s, value=7, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    s8 = tk.Radiobutton(specfrm, text=f"{(specabilities[7])}", padx=17, variable=s, value=8, selectcolor="#0d0d0d",
-                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-
-    s1.pack(anchor=tk.W)
-    s2.pack(anchor=tk.W)
-    s3.pack(anchor=tk.W)
-    s4.pack(anchor=tk.W)
-    s5.pack(anchor=tk.W)
-    s6.pack(anchor=tk.W)
-    s7.pack(anchor=tk.W)
-    s8.pack(anchor=tk.W)
-
-    # ----FRIEND/RIVAL SECTION----
-    # create list from selected playbook
-    friends = friendfoe("cutter")
-
-    # Create Friend/Rival Frame
-    frndfrm = tk.Frame(bgcreate, width=317, height=225, bg="#25262b")
-    frndfrm.place(x=598, y=315)
-    frndfrm.grid_propagate(False)
-
-    #  Create top Label
-    frndlabel = tk.Label(frndfrm, padx=75, text="Pick One Each", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
-    frndlabel.grid(column=0, row=0, columnspan=2)
-
-    # Create Button Labels
-    fbuttonlabel = tk.Label(frndfrm, padx=10, text="Friend", fg="#f25c05", bg="#25262b", anchor=tk.W,
-                            font=("Helvetica 14 bold"))
-    fbuttonlabel.grid(column=0, row=1, sticky=tk.W)
-    rbuttonlabel = tk.Label(frndfrm, padx=10, text="Rival", fg="#f25c05", bg="#25262b", justify=tk.RIGHT, anchor=tk.E,
-                            font=("Helvetica 14 bold"))
-    rbuttonlabel.grid(column=1, row=1, sticky=tk.E)
-
-    # sets variable type for friend selection radio buttons
-    fr = tk.IntVar()
-    fr.set(1)
-
-    # sets variable type for friend selection radio buttons
-    r = tk.IntVar()
-    r.set(1)
-
-    # Create friend radiobuttons
-    fr1 = tk.Radiobutton(frndfrm, text=f"   {(friends[0])}", padx=10, variable=fr, value=1, selectcolor="#0d0d0d",
-                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    fr2 = tk.Radiobutton(frndfrm, text=f"   {(friends[1])}", padx=10, variable=fr, value=2, selectcolor="#0d0d0d",
-                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    fr3 = tk.Radiobutton(frndfrm, text=f"   {(friends[2])}", padx=10, variable=fr, value=3, selectcolor="#0d0d0d",
-                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    fr4 = tk.Radiobutton(frndfrm, text=f"   {(friends[3])}", padx=10, variable=fr, value=4, selectcolor="#0d0d0d",
-                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-    fr5 = tk.Radiobutton(frndfrm, text=f"   {(friends[4])}", padx=10, variable=fr, value=5, selectcolor="#0d0d0d",
-                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
-
-    fr1.grid(column=0, row=2, sticky=tk.W)
-    fr2.grid(column=0, row=3, sticky=tk.W)
-    fr3.grid(column=0, row=4, sticky=tk.W)
-    fr4.grid(column=0, row=5, sticky=tk.W)
-    fr5.grid(column=0, row=6, sticky=tk.W)
-
-    # Create rival radiobuttons
-    r1 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=1, selectcolor="#0d0d0d", fg="#f2f2f2",
-                        bg="#25262b", font=("Helvetica 12"))
-    r2 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=2, selectcolor="#0d0d0d", fg="#f2f2f2",
-                        bg="#25262b", font=("Helvetica 12"))
-    r3 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=3, selectcolor="#0d0d0d", fg="#f2f2f2",
-                        bg="#25262b", font=("Helvetica 12"))
-    r4 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=4, selectcolor="#0d0d0d", fg="#f2f2f2",
-                        bg="#25262b", font=("Helvetica 12"))
-    r5 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=5, selectcolor="#0d0d0d", fg="#f2f2f2",
-                        bg="#25262b", font=("Helvetica 12"))
-
-    r1.grid(column=1, row=2, sticky=tk.E)
-    r2.grid(column=1, row=3, sticky=tk.E)
-    r3.grid(column=1, row=4, sticky=tk.E)
-    r4.grid(column=1, row=5, sticky=tk.E)
-    r5.grid(column=1, row=6, sticky=tk.E)
-
-    # ----ACTION RATING SECTION----
-
-    # Create Action Checkbox Variables- These store the rank of each action
-    # Insight Action Variables
-
-
-    # Create Action Rating Frames
-    actionsfrm = tk.Frame(bgcreate, width=198, height=450, bg="#25262b")
-    actionsfrm.place(x=935, y=25)
-    actionsfrm.grid_propagate(False)
-
-    hunt1 = tk.IntVar()
-    hunt2 = tk.IntVar()
-    hunt3 = tk.IntVar()
-    hunt4 = tk.IntVar()
-
-    study1 = tk.IntVar()
-    study2 = tk.IntVar()
-    study3 = tk.IntVar()
-    study4 = tk.IntVar()
-
-    survey1 = tk.IntVar()
-    survey2 = tk.IntVar()
-    survey3 = tk.IntVar()
-    survey4 = tk.IntVar()
-
-    tinker1 = tk.IntVar()
-    tinker2 = tk.IntVar()
-    tinker3 = tk.IntVar()
-    tinker4 = tk.IntVar()
-
-    # Prowess Action Variables
-    finesse1 = tk.IntVar()
-    finesse2 = tk.IntVar()
-    finesse3 = tk.IntVar()
-    finesse4 = tk.IntVar()
-
-    prowl1 = tk.IntVar()
-    prowl2 = tk.IntVar()
-    prowl3 = tk.IntVar()
-    prowl4 = tk.IntVar()
-
-    skirmish1 = tk.IntVar()
-    skirmish2 = tk.IntVar()
-    skirmish3 = tk.IntVar()
-    skirmish4 = tk.IntVar()
-
-    wreck1 = tk.IntVar()
-    wreck2 = tk.IntVar()
-    wreck3 = tk.IntVar()
-    wreck4 = tk.IntVar()
-
-    # Resolve Action Variables
-    attune1 = tk.IntVar()
-    attune2 = tk.IntVar()
-    attune3 = tk.IntVar()
-    attune4 = tk.IntVar()
-
-    command1 = tk.IntVar()
-    command2 = tk.IntVar()
-    command3 = tk.IntVar()
-    command4 = tk.IntVar()
-
-    consort1 = tk.IntVar()
-    consort2 = tk.IntVar()
-    consort3 = tk.IntVar()
-    consort4 = tk.IntVar()
-
-    sway1 = tk.IntVar()
-    sway2 = tk.IntVar()
-    sway3 = tk.IntVar()
-    sway4 = tk.IntVar()
-
     def actionclick(nextbtn, var):
+        """
+        Enables Action checkbox nextbtn if selected and disables if deselected
+        """
         value = var.get()
         if value >= 1:
             nextbtn.config(state="normal")
         elif value<1:
             nextbtn.config(state="disabled")
-
-
-    # Create Actions label
-    actionslabel = tk.Label(actionsfrm, text="Assign Four\nAction Ranks", padx=35, fg="#f25c05", bg="#25262b",
-                            anchor=tk.W, font=("Helvetica 14 bold"))
-    actionslabel.grid(column=0, columnspan=4, row=0)
-
-    # Create Insight Label
-    insightlabel = tk.Label(actionsfrm, text="Insight", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
-    insightlabel.grid(column=0, columnspan=4, row=1)
-    # Create Insight Division Checkboxes
-    # Huntboxes
-    huntbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"), variable= hunt1, command=lambda: actionclick(huntbox2, hunt1))
-    huntbox1.grid(column=0, row=2)
-    huntbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                              font=("Helvetica 11"), variable=hunt2, onvalue=2)
-    huntbox2.place(x=40, y=75)
-    huntbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                              font=("Helvetica 11"), variable=hunt3, onvalue=3)
-    huntbox3.place(x=60, y=75)
-    huntbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                              font=("Helvetica 11"), variable=hunt4, onvalue=4)
-    huntbox4.place(x=80, y=75)
-    huntlabel = tk.Label(actionsfrm, text="Hunt", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    huntlabel.place(x=120, y=76)
-
-    # Studyboxes
-    studybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                               variable=study1, command=lambda: actionclick(studybox2, study1))
-    studybox1.grid(column=0, row=3)
-    studybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=study2, onvalue=2)
-    studybox2.place(x=40, y=102)
-    studybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=study3, onvalue=3)
-    studybox3.place(x=60, y=102)
-    studybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=study4, onvalue=4)
-    studybox4.place(x=80, y=102)
-    studylabel = tk.Label(actionsfrm, text="Study", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    studylabel.place(x=120, y=103)
-
-    # Surveyboxes
-    surveybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                variable=survey1, command=lambda: actionclick(surveybox2, survey1))
-    surveybox1.grid(column=0, row=4)
-    surveybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=survey2, onvalue=2)
-    surveybox2.place(x=40, y=129)
-    surveybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=survey3, onvalue=3)
-    surveybox3.place(x=60, y=129)
-    surveybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=survey4, onvalue=4)
-    surveybox4.place(x=80, y=129)
-    surveylabel = tk.Label(actionsfrm, text="Survey", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    surveylabel.place(x=120, y=130)
-
-    # Tinkerboxes
-    tinkerbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                variable=tinker1, command=lambda: actionclick(tinkerbox2, tinker1))
-    tinkerbox1.grid(column=0, row=5)
-    tinkerbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=tinker2, onvalue=2)
-    tinkerbox2.place(x=40, y=156)
-    tinkerbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=tinker3, onvalue=3)
-    tinkerbox3.place(x=60, y=156)
-    tinkerbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=tinker4, onvalue=4)
-    tinkerbox4.place(x=80, y=156)
-    tinkerlabel = tk.Label(actionsfrm, text="Tinker", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    tinkerlabel.place(x=120, y=157)
-
-    # Create Prowess Label
-    prowesslabel = tk.Label(actionsfrm, text="Prowess", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
-    prowesslabel.grid(column=0, columnspan=4, row=6)
-    # Create Prowess Division Checkboxes
-    # Finesseboxes
-    finessebox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                 variable=finesse1, command=lambda: actionclick(finessebox2, finesse1))
-    finessebox1.grid(column=0, row=7)
-    finessebox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=finesse2, onvalue=2)
-    finessebox2.place(x=40, y=208)
-    finessebox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=finesse3, onvalue=3)
-    finessebox3.place(x=60, y=208)
-    finessebox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=finesse4, onvalue=4)
-    finessebox4.place(x=80, y=208)
-    finesselabel = tk.Label(actionsfrm, text="Finesse", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    finesselabel.place(x=120, y=209)
-
-    # Prowlboxes
-    prowlbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                               variable=prowl1, command=lambda: actionclick(prowlbox2, prowl1))
-    prowlbox1.grid(column=0, row=8)
-    prowlbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=prowl2, onvalue=2)
-    prowlbox2.place(x=40, y=235)
-    prowlbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=prowl3, onvalue=3)
-    prowlbox3.place(x=60, y=235)
-    prowlbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=prowl4, onvalue=4)
-    prowlbox4.place(x=80, y=235)
-    prowllabel = tk.Label(actionsfrm, text="Prowl", fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", font=("Helvetica 11 bold"))
-    prowllabel.place(x=120, y=235)
-
-    # Skirmishboxes
-    skirmishbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                  variable=skirmish1, command=lambda: actionclick(skirmishbox2, skirmish1))
-    skirmishbox1.grid(column=0, row=9)
-    skirmishbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                  font=("Helvetica 11"), variable=skirmish2, onvalue=2)
-    skirmishbox2.place(x=40, y=262)
-    skirmishbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                  font=("Helvetica 11"), variable=skirmish3, onvalue=3)
-    skirmishbox3.place(x=60, y=262)
-    skirmishbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                  font=("Helvetica 11"), variable=skirmish4, onvalue=4)
-    skirmishbox4.place(x=80, y=262)
-    skirmishlabel = tk.Label(actionsfrm, text="Skirmish", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    skirmishlabel.place(x=120, y=263)
-
-    # Wreckboxes
-    wreckbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                               variable=wreck1, command=lambda: actionclick(wreckbox2, wreck1))
-    wreckbox1.grid(column=0, row=10)
-    wreckbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=wreck2, onvalue=2)
-    wreckbox2.place(x=40, y=289)
-    wreckbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=wreck3, onvalue=3)
-    wreckbox3.place(x=60, y=289)
-    wreckbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                               font=("Helvetica 11"), variable=wreck4, onvalue=4)
-    wreckbox4.place(x=80, y=289)
-    wrecklabel = tk.Label(actionsfrm, text="Wreck", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    wrecklabel.place(x=120, y=290)
-
-    # Create Resolve Label
-    resolvelabel = tk.Label(actionsfrm, text="Resolve", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
-    resolvelabel.grid(column=0, columnspan=4, row=11)
-    # Create Resolve Division Checkboxes
-    # Attune Boxes
-    attunebox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                variable=attune1, command=lambda: actionclick(attunebox2, attune1))
-    attunebox1.grid(column=0, row=12)
-    attunebox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=attune2, onvalue=2)
-    attunebox2.place(x=40, y=341)
-    attunebox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=attune3, onvalue=3)
-    attunebox3.place(x=60, y=341)
-    attunebox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=attune4, onvalue=4)
-    attunebox4.place(x=80, y=341)
-    attunelabel = tk.Label(actionsfrm, text="Attune", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    attunelabel.place(x=120, y=342)
-
-    # Command Boxes
-    commandbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"), variable=command1, command=lambda: actionclick(commandbox2, command1))
-    commandbox1.grid(column=0, row=13)
-    commandbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=command2, onvalue=2)
-    commandbox2.place(x=40, y=368)
-    commandbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=command3, onvalue=3)
-    commandbox3.place(x=60, y=368)
-    commandbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=command4, onvalue=4)
-    commandbox4.place(x=80, y=368)
-    commandlabel = tk.Label(actionsfrm, text="Command", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    commandlabel.place(x=120, y=369)
-
-    # Consort Boxes
-    consortbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                                 variable=consort1, command=lambda: actionclick(consortbox2, consort1))
-    consortbox1.grid(column=0, row=14)
-    consortbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=consort2, onvalue=2)
-    consortbox2.place(x=40, y=395)
-    consortbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=consort3, onvalue=3)
-    consortbox3.place(x=60, y=395)
-    consortbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                 font=("Helvetica 11"), variable=consort4, onvalue=4)
-    consortbox4.place(x=80, y=395)
-    consortlabel = tk.Label(actionsfrm, text="Consort", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    consortlabel.place(x=120, y=396)
-
-    # Sway Boxes
-    swaybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
-                              variable=sway1, command=lambda: actionclick(swaybox2, sway1))
-    swaybox1.grid(column=0, row=15)
-    swaybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                              font=("Helvetica 11"), variable=sway2, onvalue=2)
-    swaybox2.place(x=40, y=422)
-    swaybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                                font=("Helvetica 11"), variable=sway3, onvalue=3)
-    swaybox3.place(x=60, y=422)
-    swaybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
-                              font=("Helvetica 11"), variable=sway4, onvalue=4)
-    swaybox4.place(x=80, y=422)
-    swaylabel = tk.Label(actionsfrm, text="Sway", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
-    swaylabel.place(x=120, y=423)
-
-    actionckbxlist = [huntbox1, huntbox2, huntbox3, huntbox4, studybox1, studybox2, studybox3, studybox4, surveybox1, surveybox2, surveybox3, surveybox4, tinkerbox1,tinkerbox2, tinkerbox3, tinkerbox4, finessebox1, finessebox2, finessebox3, finessebox4, prowlbox1, prowlbox2, prowlbox3, prowlbox4, skirmishbox1, skirmishbox2, skirmishbox3, skirmishbox4, wreckbox1, wreckbox2, wreckbox3, wreckbox4, attunebox1, attunebox2, attunebox3, attunebox4, commandbox1, commandbox2, commandbox3, commandbox4, consortbox1, consortbox2, consortbox3, consortbox4, swaybox1, swaybox2, swaybox3, swaybox4]
-    action1_2list = [huntbox1, huntbox2, studybox1, studybox2, surveybox1, tinkerbox1,tinkerbox2, tinkerbox3, tinkerbox4, finessebox1, finessebox2, finessebox3, finessebox4, prowlbox1, prowlbox2, prowlbox3, prowlbox4, skirmishbox1, skirmishbox2, skirmishbox3, skirmishbox4, wreckbox1, wreckbox2, wreckbox3, wreckbox4, attunebox1, attunebox2, attunebox3, attunebox4, commandbox1, commandbox2, commandbox3, commandbox4, consortbox1, consortbox2, consortbox3, consortbox4, swaybox1, swaybox2, swaybox3, swaybox4]
-
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>> Save File <<<<<<<<<<<<<<<<<<<<<
-
-    # Save button
-    def opnfile():
-        global file_image
-        opnfilename = filedialog.askopenfilename(initialdir="", title="Select A File",
-                                                   filetypes=[("CSV files", "*.csv")])
 
     def savfile():
         """
@@ -870,13 +447,432 @@ def opencreate():
                 skirmishcsv, wreckcsv, attunecsv, commandcsv, consortcsv, swaycsv]
 
         # sets up the file dialog and writes the csv
-        with open(filedialog.asksaveasfilename(parent=root, filetypes=formats, defaultextension=".csv",
+        with open(filedialog.asksaveasfilename(parent=None, filetypes=formats, defaultextension=".csv",
                                                title="Save As..."),
                   'w', newline='', encoding='utf-8') as fp:
             csvwriter = csv.writer(fp)
             csvwriter.writerow(fields)
             csvwriter.writerow(rows)
 
+    # Create Playbook Selection Frame
+    archselframe = tk.Frame(bgcreate, width=485, height=125, bg="#25262b")
+    archselframe.place(x=75, y=400)
+
+    # Create Label
+    archsellabel = tk.Label(archselframe, padx=160, pady=4, text="Select A Playbook", fg="#f25c05", bg="#25262b",
+                            font=("Helvetica 14 bold"))
+    archsellabel.grid(column=0, row=0, columnspan=4)
+
+    # sets variable type for playbook selection radio buttons
+    p1 = tk.IntVar()
+    p1.set(1)
+
+    # first row radiobuttons
+    for i in range(1, 5):
+        tk.Radiobutton(archselframe, text=f"{(playbooknames[i - 1])}", padx=17, variable=p1, value=i,
+                       selectcolor="#0d0d0d", fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"),
+                       command=lambda: playclick(p1.get())).grid(row=1, column=i - 1)
+
+    # second row radiobuttons
+    for i in range(5, 8):
+        tk.Radiobutton(archselframe, text=f"{(playbooknames[i - 1])}", padx=17, variable=p1, value=i,
+                       selectcolor="#0d0d0d", fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"),
+                       command=lambda: playclick(p1.get())).grid(row=2, column=i - 5, columnspan=2)
+
+    # ----SPECIAL ABILITY SECTION----
+
+    # create starting list from intitially selected playbook
+    specabilities = specability("cutter")
+
+    # Create Special Ability Frame
+    specfrm = tk.Frame(bgcreate, width=317, height=275, bg="#25262b")
+    specfrm.place(x=598, y=25)
+    specfrm.pack_propagate(False)
+
+    # sets variable type for ability selection radio buttons
+    s = tk.IntVar()
+    s.set(1)
+
+    # Creates label and radiobuttons
+    # label
+    speclabel = tk.Label(specfrm, text="Pick A Special Ability", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
+    speclabel.pack()
+
+    # radiobuttons
+    s1 = tk.Radiobutton(specfrm, text=f"{(specabilities[0])}", padx=17, variable=s, value=1, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s2 = tk.Radiobutton(specfrm, text=f"{(specabilities[1])}", padx=17, variable=s, value=2, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s3 = tk.Radiobutton(specfrm, text=f"{(specabilities[2])}", padx=17, variable=s, value=3, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s4 = tk.Radiobutton(specfrm, text=f"{(specabilities[3])}", padx=17, variable=s, value=4, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s5 = tk.Radiobutton(specfrm, text=f"{(specabilities[4])}", padx=17, variable=s, value=5, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s6 = tk.Radiobutton(specfrm, text=f"{(specabilities[5])}", padx=17, variable=s, value=6, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s7 = tk.Radiobutton(specfrm, text=f"{(specabilities[6])}", padx=17, variable=s, value=7, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    s8 = tk.Radiobutton(specfrm, text=f"{(specabilities[7])}", padx=17, variable=s, value=8, selectcolor="#0d0d0d",
+                        fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+
+    s1.pack(anchor=tk.W)
+    s2.pack(anchor=tk.W)
+    s3.pack(anchor=tk.W)
+    s4.pack(anchor=tk.W)
+    s5.pack(anchor=tk.W)
+    s6.pack(anchor=tk.W)
+    s7.pack(anchor=tk.W)
+    s8.pack(anchor=tk.W)
+
+    # ----FRIEND/RIVAL SECTION----
+    # create initial list from initially selected playbook
+    friends = friendfoe("cutter")
+
+    # Create Friend/Rival Frame
+    frndfrm = tk.Frame(bgcreate, width=317, height=225, bg="#25262b")
+    frndfrm.place(x=598, y=315)
+    frndfrm.grid_propagate(False)
+
+    #  Create top Label
+    frndlabel = tk.Label(frndfrm, padx=75, text="Pick One Each", fg="#f25c05", bg="#25262b", font=("Helvetica 14 bold"))
+    frndlabel.grid(column=0, row=0, columnspan=2)
+
+    # Create Button Labels
+    fbuttonlabel = tk.Label(frndfrm, padx=10, text="Friend", fg="#f25c05", bg="#25262b", anchor=tk.W,
+                            font=("Helvetica 14 bold"))
+    fbuttonlabel.grid(column=0, row=1, sticky=tk.W)
+    rbuttonlabel = tk.Label(frndfrm, padx=10, text="Rival", fg="#f25c05", bg="#25262b", justify=tk.RIGHT, anchor=tk.E,
+                            font=("Helvetica 14 bold"))
+    rbuttonlabel.grid(column=1, row=1, sticky=tk.E)
+
+    # sets variable type for friend selection radio buttons
+    fr = tk.IntVar()
+    fr.set(1)
+
+    # sets variable type for friend selection radio buttons
+    r = tk.IntVar()
+    r.set(1)
+
+    # Create friend radiobuttons
+    fr1 = tk.Radiobutton(frndfrm, text=f"   {(friends[0])}", padx=10, variable=fr, value=1, selectcolor="#0d0d0d",
+                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    fr2 = tk.Radiobutton(frndfrm, text=f"   {(friends[1])}", padx=10, variable=fr, value=2, selectcolor="#0d0d0d",
+                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    fr3 = tk.Radiobutton(frndfrm, text=f"   {(friends[2])}", padx=10, variable=fr, value=3, selectcolor="#0d0d0d",
+                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    fr4 = tk.Radiobutton(frndfrm, text=f"   {(friends[3])}", padx=10, variable=fr, value=4, selectcolor="#0d0d0d",
+                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+    fr5 = tk.Radiobutton(frndfrm, text=f"   {(friends[4])}", padx=10, variable=fr, value=5, selectcolor="#0d0d0d",
+                         fg="#f2f2f2", bg="#25262b", font=("Helvetica 12"))
+
+    fr1.grid(column=0, row=2, sticky=tk.W)
+    fr2.grid(column=0, row=3, sticky=tk.W)
+    fr3.grid(column=0, row=4, sticky=tk.W)
+    fr4.grid(column=0, row=5, sticky=tk.W)
+    fr5.grid(column=0, row=6, sticky=tk.W)
+
+    # Create rival radiobuttons
+    r1 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=1, selectcolor="#0d0d0d", fg="#f2f2f2",
+                        bg="#25262b", font=("Helvetica 12"))
+    r2 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=2, selectcolor="#0d0d0d", fg="#f2f2f2",
+                        bg="#25262b", font=("Helvetica 12"))
+    r3 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=3, selectcolor="#0d0d0d", fg="#f2f2f2",
+                        bg="#25262b", font=("Helvetica 12"))
+    r4 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=4, selectcolor="#0d0d0d", fg="#f2f2f2",
+                        bg="#25262b", font=("Helvetica 12"))
+    r5 = tk.Radiobutton(frndfrm, text=f"", padx=17, variable=r, value=5, selectcolor="#0d0d0d", fg="#f2f2f2",
+                        bg="#25262b", font=("Helvetica 12"))
+
+    r1.grid(column=1, row=2, sticky=tk.E)
+    r2.grid(column=1, row=3, sticky=tk.E)
+    r3.grid(column=1, row=4, sticky=tk.E)
+    r4.grid(column=1, row=5, sticky=tk.E)
+    r5.grid(column=1, row=6, sticky=tk.E)
+
+    # ----ACTION RATING SECTION----
+
+    # Create Action Rating Frames
+    actionsfrm = tk.Frame(bgcreate, width=198, height=450, bg="#25262b")
+    actionsfrm.place(x=935, y=25)
+    actionsfrm.grid_propagate(False)
+
+    # Create Action Checkbox Variables- These store the rank of each action
+    # Insight Action Variables
+    hunt1 = tk.IntVar()
+    hunt2 = tk.IntVar()
+    hunt3 = tk.IntVar()
+    hunt4 = tk.IntVar()
+
+    study1 = tk.IntVar()
+    study2 = tk.IntVar()
+    study3 = tk.IntVar()
+    study4 = tk.IntVar()
+
+    survey1 = tk.IntVar()
+    survey2 = tk.IntVar()
+    survey3 = tk.IntVar()
+    survey4 = tk.IntVar()
+
+    tinker1 = tk.IntVar()
+    tinker2 = tk.IntVar()
+    tinker3 = tk.IntVar()
+    tinker4 = tk.IntVar()
+
+    # Prowess Action Variables
+    finesse1 = tk.IntVar()
+    finesse2 = tk.IntVar()
+    finesse3 = tk.IntVar()
+    finesse4 = tk.IntVar()
+
+    prowl1 = tk.IntVar()
+    prowl2 = tk.IntVar()
+    prowl3 = tk.IntVar()
+    prowl4 = tk.IntVar()
+
+    skirmish1 = tk.IntVar()
+    skirmish2 = tk.IntVar()
+    skirmish3 = tk.IntVar()
+    skirmish4 = tk.IntVar()
+
+    wreck1 = tk.IntVar()
+    wreck2 = tk.IntVar()
+    wreck3 = tk.IntVar()
+    wreck4 = tk.IntVar()
+
+    # Resolve Action Variables
+    attune1 = tk.IntVar()
+    attune2 = tk.IntVar()
+    attune3 = tk.IntVar()
+    attune4 = tk.IntVar()
+
+    command1 = tk.IntVar()
+    command2 = tk.IntVar()
+    command3 = tk.IntVar()
+    command4 = tk.IntVar()
+
+    consort1 = tk.IntVar()
+    consort2 = tk.IntVar()
+    consort3 = tk.IntVar()
+    consort4 = tk.IntVar()
+
+    sway1 = tk.IntVar()
+    sway2 = tk.IntVar()
+    sway3 = tk.IntVar()
+    sway4 = tk.IntVar()
+
+    # Create Actions label
+    actionslabel = tk.Label(actionsfrm, text="Assign Four\nAction Ranks", padx=35, fg="#f25c05", bg="#25262b",
+                            anchor=tk.W, font=("Helvetica 14 bold"))
+    actionslabel.grid(column=0, columnspan=4, row=0)
+
+    # Create Insight Label
+    insightlabel = tk.Label(actionsfrm, text="Insight", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
+    insightlabel.grid(column=0, columnspan=4, row=1)
+
+    # Create Insight Division Checkboxes
+    # Huntboxes
+    huntbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"), variable= hunt1, command=lambda: actionclick(huntbox2, hunt1))
+    huntbox1.grid(column=0, row=2)
+    huntbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                              font=("Helvetica 11"), variable=hunt2, onvalue=2)
+    huntbox2.place(x=40, y=75)
+    huntbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                              font=("Helvetica 11"), variable=hunt3, onvalue=3)
+    huntbox3.place(x=60, y=75)
+    huntbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                              font=("Helvetica 11"), variable=hunt4, onvalue=4)
+    huntbox4.place(x=80, y=75)
+    huntlabel = tk.Label(actionsfrm, text="Hunt", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    huntlabel.place(x=120, y=76)
+
+    # Studyboxes
+    studybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                               variable=study1, command=lambda: actionclick(studybox2, study1))
+    studybox1.grid(column=0, row=3)
+    studybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=study2, onvalue=2)
+    studybox2.place(x=40, y=102)
+    studybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=study3, onvalue=3)
+    studybox3.place(x=60, y=102)
+    studybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=study4, onvalue=4)
+    studybox4.place(x=80, y=102)
+    studylabel = tk.Label(actionsfrm, text="Study", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    studylabel.place(x=120, y=103)
+
+    # Surveyboxes
+    surveybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                variable=survey1, command=lambda: actionclick(surveybox2, survey1))
+    surveybox1.grid(column=0, row=4)
+    surveybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=survey2, onvalue=2)
+    surveybox2.place(x=40, y=129)
+    surveybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=survey3, onvalue=3)
+    surveybox3.place(x=60, y=129)
+    surveybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=survey4, onvalue=4)
+    surveybox4.place(x=80, y=129)
+    surveylabel = tk.Label(actionsfrm, text="Survey", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    surveylabel.place(x=120, y=130)
+
+    # Tinkerboxes
+    tinkerbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                variable=tinker1, command=lambda: actionclick(tinkerbox2, tinker1))
+    tinkerbox1.grid(column=0, row=5)
+    tinkerbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=tinker2, onvalue=2)
+    tinkerbox2.place(x=40, y=156)
+    tinkerbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=tinker3, onvalue=3)
+    tinkerbox3.place(x=60, y=156)
+    tinkerbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=tinker4, onvalue=4)
+    tinkerbox4.place(x=80, y=156)
+    tinkerlabel = tk.Label(actionsfrm, text="Tinker", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    tinkerlabel.place(x=120, y=157)
+
+    # Create Prowess Label
+    prowesslabel = tk.Label(actionsfrm, text="Prowess", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
+    prowesslabel.grid(column=0, columnspan=4, row=6)
+
+    # Create Prowess Division Checkboxes
+    # Finesseboxes
+    finessebox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                 variable=finesse1, command=lambda: actionclick(finessebox2, finesse1))
+    finessebox1.grid(column=0, row=7)
+    finessebox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=finesse2, onvalue=2)
+    finessebox2.place(x=40, y=208)
+    finessebox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=finesse3, onvalue=3)
+    finessebox3.place(x=60, y=208)
+    finessebox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=finesse4, onvalue=4)
+    finessebox4.place(x=80, y=208)
+    finesselabel = tk.Label(actionsfrm, text="Finesse", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    finesselabel.place(x=120, y=209)
+
+    # Prowlboxes
+    prowlbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                               variable=prowl1, command=lambda: actionclick(prowlbox2, prowl1))
+    prowlbox1.grid(column=0, row=8)
+    prowlbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=prowl2, onvalue=2)
+    prowlbox2.place(x=40, y=235)
+    prowlbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=prowl3, onvalue=3)
+    prowlbox3.place(x=60, y=235)
+    prowlbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=prowl4, onvalue=4)
+    prowlbox4.place(x=80, y=235)
+    prowllabel = tk.Label(actionsfrm, text="Prowl", fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", font=("Helvetica 11 bold"))
+    prowllabel.place(x=120, y=235)
+
+    # Skirmishboxes
+    skirmishbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                  variable=skirmish1, command=lambda: actionclick(skirmishbox2, skirmish1))
+    skirmishbox1.grid(column=0, row=9)
+    skirmishbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                  font=("Helvetica 11"), variable=skirmish2, onvalue=2)
+    skirmishbox2.place(x=40, y=262)
+    skirmishbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                  font=("Helvetica 11"), variable=skirmish3, onvalue=3)
+    skirmishbox3.place(x=60, y=262)
+    skirmishbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                  font=("Helvetica 11"), variable=skirmish4, onvalue=4)
+    skirmishbox4.place(x=80, y=262)
+    skirmishlabel = tk.Label(actionsfrm, text="Skirmish", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    skirmishlabel.place(x=120, y=263)
+
+    # Wreckboxes
+    wreckbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                               variable=wreck1, command=lambda: actionclick(wreckbox2, wreck1))
+    wreckbox1.grid(column=0, row=10)
+    wreckbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=wreck2, onvalue=2)
+    wreckbox2.place(x=40, y=289)
+    wreckbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=wreck3, onvalue=3)
+    wreckbox3.place(x=60, y=289)
+    wreckbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                               font=("Helvetica 11"), variable=wreck4, onvalue=4)
+    wreckbox4.place(x=80, y=289)
+    wrecklabel = tk.Label(actionsfrm, text="Wreck", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    wrecklabel.place(x=120, y=290)
+
+    # Create Resolve Label
+    resolvelabel = tk.Label(actionsfrm, text="Resolve", padx=35, fg="#f2f2f2", bg="#25262b", font=("Helvetica 12 bold"))
+    resolvelabel.grid(column=0, columnspan=4, row=11)
+
+    # Create Resolve Division Checkboxes
+    # Attune Boxes
+    attunebox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                variable=attune1, command=lambda: actionclick(attunebox2, attune1))
+    attunebox1.grid(column=0, row=12)
+    attunebox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=attune2, onvalue=2)
+    attunebox2.place(x=40, y=341)
+    attunebox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=attune3, onvalue=3)
+    attunebox3.place(x=60, y=341)
+    attunebox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=attune4, onvalue=4)
+    attunebox4.place(x=80, y=341)
+    attunelabel = tk.Label(actionsfrm, text="Attune", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    attunelabel.place(x=120, y=342)
+
+    # Command Boxes
+    commandbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"), variable=command1, command=lambda: actionclick(commandbox2, command1))
+    commandbox1.grid(column=0, row=13)
+    commandbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=command2, onvalue=2)
+    commandbox2.place(x=40, y=368)
+    commandbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=command3, onvalue=3)
+    commandbox3.place(x=60, y=368)
+    commandbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=command4, onvalue=4)
+    commandbox4.place(x=80, y=368)
+    commandlabel = tk.Label(actionsfrm, text="Command", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    commandlabel.place(x=120, y=369)
+
+    # Consort Boxes
+    consortbox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                                 variable=consort1, command=lambda: actionclick(consortbox2, consort1))
+    consortbox1.grid(column=0, row=14)
+    consortbox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=consort2, onvalue=2)
+    consortbox2.place(x=40, y=395)
+    consortbox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=consort3, onvalue=3)
+    consortbox3.place(x=60, y=395)
+    consortbox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                 font=("Helvetica 11"), variable=consort4, onvalue=4)
+    consortbox4.place(x=80, y=395)
+    consortlabel = tk.Label(actionsfrm, text="Consort", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    consortlabel.place(x=120, y=396)
+
+    # Sway Boxes
+    swaybox1 = tk.Checkbutton(actionsfrm, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d", font=("Helvetica 11"),
+                              variable=sway1, command=lambda: actionclick(swaybox2, sway1))
+    swaybox1.grid(column=0, row=15)
+    swaybox2 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                              font=("Helvetica 11"), variable=sway2, onvalue=2)
+    swaybox2.place(x=40, y=422)
+    swaybox3 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                                font=("Helvetica 11"), variable=sway3, onvalue=3)
+    swaybox3.place(x=60, y=422)
+    swaybox4 = tk.Checkbutton(actionsfrm, state=tk.DISABLED, fg="#f2f2f2", bg="#25262b", disabledforeground="#f25c05", selectcolor="#0d0d0d",
+                              font=("Helvetica 11"), variable=sway4, onvalue=4)
+    swaybox4.place(x=80, y=422)
+    swaylabel = tk.Label(actionsfrm, text="Sway", fg="#f2f2f2", bg="#25262b", font=("Helvetica 11 bold"))
+    swaylabel.place(x=120, y=423)
+
+    actionckbxlist = [huntbox1, huntbox2, huntbox3, huntbox4, studybox1, studybox2, studybox3, studybox4, surveybox1, surveybox2, surveybox3, surveybox4, tinkerbox1,tinkerbox2, tinkerbox3, tinkerbox4, finessebox1, finessebox2, finessebox3, finessebox4, prowlbox1, prowlbox2, prowlbox3, prowlbox4, skirmishbox1, skirmishbox2, skirmishbox3, skirmishbox4, wreckbox1, wreckbox2, wreckbox3, wreckbox4, attunebox1, attunebox2, attunebox3, attunebox4, commandbox1, commandbox2, commandbox3, commandbox4, consortbox1, consortbox2, consortbox3, consortbox4, swaybox1, swaybox2, swaybox3, swaybox4]
+    action1_2list = [huntbox1, huntbox2, studybox1, studybox2, surveybox1, tinkerbox1,tinkerbox2, tinkerbox3, tinkerbox4, finessebox1, finessebox2, finessebox3, finessebox4, prowlbox1, prowlbox2, prowlbox3, prowlbox4, skirmishbox1, skirmishbox2, skirmishbox3, skirmishbox4, wreckbox1, wreckbox2, wreckbox3, wreckbox4, attunebox1, attunebox2, attunebox3, attunebox4, commandbox1, commandbox2, commandbox3, commandbox4, consortbox1, consortbox2, consortbox3, consortbox4, swaybox1, swaybox2, swaybox3, swaybox4]
 
     # Save file button
     savebutton = tk.Button(bgcreate, text="Save Character", command=savfile, padx=27, pady=10, bg="#25262b",
@@ -884,6 +880,13 @@ def opencreate():
     savebutton.place(x=965, y=495)
 
     # >>>>>>>>>>>>>>>>>>>>> Navigation Section (Create Char)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    def openmain():
+        """
+        Closes the Create Character Window
+        """
+        crwindow.withdraw()
+
     # Create Navigation Frame
     navcfrm = tk.Frame(crwindow, width=1200, height=85, bg="#0d0d0d", borderwidth=0, highlightthickness=0)
     navcfrm.grid(row=1, column=0, columnspan=14)
